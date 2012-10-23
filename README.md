@@ -1,9 +1,11 @@
 # process-env-brunch
 
-"Parses brunch files and replaces the ```_PROCESS_ENV_FOO``` token with the value of ```process.env.FOO```."
+Parses brunch files and replaces the ```_PROCESS_ENV_FOO``` token with the value of ```process.env.FOO```.
 
 ## Getting Started
 Install the module with: `npm install process-env-brunch`
+
+Be sure to include this in your brunch project's ```package.json``` BEFORE any languages you want precompiled (e.g. ahead of coffeescript-brunch).
 
 ## Documentation
 _(Coming soon)_
