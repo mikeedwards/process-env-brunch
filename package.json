@@ -1,7 +1,7 @@
 {
   "name": "process-env-brunch",
   "description": "\"Parses brunch files and replaces the _PROCESS_ENV_FOO token with the value of process.env.FOO.\"",
-  "version": "0.0.1",
+  "version": "1.4.4",
   "homepage": "https://github.com/mikeedwards/process-env-brunch",
   "author": {
     "name": "Mike Edwards",
@@ -26,7 +26,7 @@
     "node": "~0.6.10 || 0.8 || 0.9"
   },
   "scripts": {
-    "prepublish": "coffee -o lib/ src/",
+    "prepublish": "coffee -c -o lib/ src/",
     "postinstall": "node setup.js postinstall",
     "test": "grunt test"
   },
