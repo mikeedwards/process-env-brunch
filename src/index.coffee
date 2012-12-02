@@ -2,17 +2,22 @@ fs = require "fs"
 
 module.exports = class ProcessEnvPrecompiler
   brunchPlugin: yes
-  searchRegEx: /_PROCESS_ENV_(\w+)/gi
+  searchRegEx: /\$PROCESS_ENV_(\w+)/gi
 
   constructor: (@config) ->
 
   onCompile: (generatedFiles) ->
     for generatedFile in generatedFiles
       do (generatedFile) =>
-        fs.readFile generatedFile.path, "utf8", (err, data) =>
-          result = data.replace @searchRegEx, (match)=>
-            '"' + process.env[(@searchRegEx.exec match)[1]] + '"'
-          
-          fs.writeFile generatedFile.path, result
+        data = fs.readFileSync generatedFile.path, "utf8"
+        result = data.replace @searchRegEx, (match) =>
+          matches = @searchRegEx.exec match
+          if matches isnt null
+            replacement = process.env[matches[1]]
+          else
+            replacement = 'undefined'
+          replacement
+        
+        fs.writeFileSync generatedFile.path, result
 
 
