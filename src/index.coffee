@@ -13,11 +13,11 @@ module.exports = class ProcessEnvPrecompiler
         result = data.replace @searchRegEx, (match) =>
           matches = @searchRegEx.exec match
           if matches isnt null
-            replacement = process.env[matches[1]]
+            replacement = "'" + process.env[matches[1]] + "'"
           else
             replacement = 'undefined'
           replacement
-        
+
         fs.writeFileSync generatedFile.path, result
 
 
