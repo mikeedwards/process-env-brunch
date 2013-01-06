@@ -1,6 +1,6 @@
 # process-env-brunch
 
-Parses brunch files and replaces the ```_PROCESS_ENV_FOO``` token with the value of ```process.env.FOO```.
+Parses brunch files and replaces the ```$PROCESS_ENV_FOO``` token with the value of ```process.env.FOO```.
 
 ## Getting Started
 Install the module with: `npm install process-env-brunch`
