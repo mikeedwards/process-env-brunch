@@ -1,7 +1,7 @@
 {
   "name": "process-env-brunch",
   "description": "Parses brunch files and replaces the _PROCESS_ENV_FOO token with the value of process.env.FOO.",
-  "version": "1.4.4c",
+  "version": "1.4.4d",
   "homepage": "https://github.com/mikeedwards/process-env-brunch",
   "author": {
     "name": "Mike Edwards",

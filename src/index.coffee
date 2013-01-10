@@ -11,13 +11,11 @@ module.exports = class ProcessEnvPrecompiler
       do (generatedFile) =>
         data = fs.readFileSync generatedFile.path, "utf8"
         result = data.replace @searchRegEx, (match) =>
-          matches = @searchRegEx.exec match
-          if matches isnt null and process.env[matches[1]]
-            replacement = "'" + process.env[matches[1]] + "'"
+          match = match.replace '$PROCESS_ENV_', ''
+          if match and process.env[match]
+            replacement = "'" + process.env[match] + "'"
           else
             replacement = 'undefined'
           replacement
 
         fs.writeFileSync generatedFile.path, result
-
-
