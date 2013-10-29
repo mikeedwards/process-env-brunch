@@ -7,17 +7,34 @@ module.exports = class ProcessEnvPrecompiler
   constructor: (config) ->
     # Extract own config object
     conf = config.plugins?.process_env or {}
-
-    # Custom targets to process aside from generated files
-    @customTargets = for target in (conf.custom_targets or [])
-      # Simulate generated files
-      path: target
-
+    # Custom source files to process aside from generated files
+    @customSources = conf.custom_sources or []
     # Allow raw (unquoted) processing
     @raw = conf.raw or false
 
+  # Scan through the files to see whether there are matching *source* files
+  # that need to be individually processed
+  includeCustomSources: (generatedFiles) ->
+    # Save us some resources if there isn't any custom sources
+    return generatedFiles unless @customSources.length > 0
+
+    # Extract the files that will be processed either way
+    files = for file in generatedFiles
+      path: file.path
+
+    # Go through each category of generated files
+    for generatedFile in generatedFiles
+      # Go through each source file
+      for file in generatedFile.sourceFiles
+        # If it's wanted, add to files
+        if file.path.indexOf(@customSources) > -1
+          files.push file
+
+    # Return the new files object
+    files
+
   onCompile: (generatedFiles) ->
-    for file in @customTargets.concat generatedFiles
+    for file in @includeCustomSources generatedFiles
       do (file) =>
         data = fs.readFileSync file.path, "utf8"
         result = data.replace @searchRegEx, (match) =>
