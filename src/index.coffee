@@ -13,6 +13,9 @@ module.exports = class ProcessEnvPrecompiler
       # Simulate generated files
       path: target
 
+    # Allow raw (unquoted) processing
+    @raw = conf.raw or false
+
   onCompile: (generatedFiles) ->
     for file in @customTargets.concat generatedFiles
       do (file) =>
@@ -20,7 +23,12 @@ module.exports = class ProcessEnvPrecompiler
         result = data.replace @searchRegEx, (match) =>
           match = match.replace '$PROCESS_ENV_', ''
           if match and process.env[match]
-            replacement = "'" + process.env[match] + "'"
+            if @raw
+              # Pass through as-is if desired
+              replacement = process.env[match]
+            else
+              # Quote it to be safe otherwise
+              replacement = "'" + process.env[match] + "'"
           else
             replacement = 'undefined'
           replacement
