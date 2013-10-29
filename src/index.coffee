@@ -4,12 +4,19 @@ module.exports = class ProcessEnvPrecompiler
   brunchPlugin: yes
   searchRegEx: /\$PROCESS_ENV_(\w+)/gi
 
-  constructor: (@config) ->
+  constructor: (config) ->
+    # Extract own config object
+    conf = config.plugins?.process_env or {}
+
+    # Custom targets to process aside from generated files
+    @customTargets = for target in (conf.custom_targets or [])
+      # Simulate generated files
+      path: target
 
   onCompile: (generatedFiles) ->
-    for generatedFile in generatedFiles
-      do (generatedFile) =>
-        data = fs.readFileSync generatedFile.path, "utf8"
+    for file in @customTargets.concat generatedFiles
+      do (file) =>
+        data = fs.readFileSync file.path, "utf8"
         result = data.replace @searchRegEx, (match) =>
           match = match.replace '$PROCESS_ENV_', ''
           if match and process.env[match]
@@ -18,4 +25,4 @@ module.exports = class ProcessEnvPrecompiler
             replacement = 'undefined'
           replacement
 
-        fs.writeFileSync generatedFile.path, result
+        fs.writeFileSync file.path, result
